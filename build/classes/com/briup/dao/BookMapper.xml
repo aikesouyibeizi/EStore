@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- com.briup.mappers.StudentMapper是我们定义接口的全限定名字 这样就可以使用接口调用映射的SQL语句了 这个名字一定要和接口对应上-->
+<mapper namespace="com.briup.dao.BookMapper">
+	
+	<select id="findAllBooks" resultType="Book">
+		select id,name,price
+		from e_book
+	</select>
+	
+	<resultMap type="Book" id="BookResult">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="price" column="price"/>
+		<association property="category" resultMap="CategoryResult"></association>
+	</resultMap>
+	<resultMap type="Category" id="CategoryResult">
+		<id property="id" column="cid"/>
+		<result property="name" column="cname"/>
+		<result property="info" column="info"/>
+	</resultMap>
+	
+	<select id="findBookByIdWithCategory" parameterType="int" resultMap="BookResult">
+		select b.id,b.name,b.price,c.id cid,c.name cname,c.info
+		from e_book b,e_category c
+		where b.categoryId=c.id
+			and b.id=#{id}
+	</select>
+	
+	
+	
+</mapper>

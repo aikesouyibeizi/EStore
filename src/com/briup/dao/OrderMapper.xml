@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- com.briup.mappers.StudentMapper是我们定义接口的全限定名字 这样就可以使用接口调用映射的SQL语句了 这个名字一定要和接口对应上-->
+<mapper namespace="com.briup.dao.OrderMapper">
+	<resultMap type="Customer" id="CustomerResult">
+		<id property="id" column="id"/>
+		<result property="username" column="username"/>
+		<result property="password" column="password"/>
+		<result property="zip" column="zip"/>
+		<result property="address" column="address"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+	</resultMap>
+	
+	<resultMap type="Order" id="OrderResult">
+		<id property="id" column="id"/>
+		<result property="total" column="total"/>
+		<result property="orderDate" column="orderDate"/>
+		<result property="name" column="name"/>
+		<result property="address" column="address"/>
+		<result property="telephone" column="telephone"/>
+		<association property="customer" resultMap="CustomerResult"></association>
+	</resultMap>
+	
+	<insert id="insertOrder" parameterType="Order">
+		<selectKey keyProperty="id" resultType="int" order="BEFORE">
+			select order_id_seq.nextval from dual
+		</selectKey>
+		insert into e_order(id,total,orderDate,name,address,telephone,cusId) 
+		values(#{id},#{total},#{orderDate},#{name},#{address},#{telephone},#{customer.id})
+	</insert>	
+	
+	
+	<!-- <select id="find" resultType="int">
+		select order_id_seq.currval from dual
+	</select>
+	
+	<select id="findId" resultType="int">
+		select order_id_seq.nextval from dual
+	</select> -->
+	<select id="findAllOrders" resultMap="OrderResult">
+		select * from e_order
+	</select>
+	
+	
+	
+	
+	
+	
+</mapper>
